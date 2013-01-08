@@ -9,7 +9,7 @@ class Card(Document):
     rcost       = IntField()
     gcost       = IntField()
     wcost       = IntField()
-    total_cost  = ListField(IntField(), default=list)
+    total_cost  = ListField(IntField(), default=list, required=True)
     ccost       = IntField(required=True)
     image_path  = StringField()
 
