@@ -4,6 +4,7 @@ class Card(Document):
     cid         = ObjectIdField()
     name        = StringField(required=True, max_length=35)
     desc        = StringField(required=False)
+    flv         = StringField(required=True)
     ucost       = IntField()
     bcost       = IntField()
     rcost       = IntField()

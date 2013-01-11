@@ -33,11 +33,11 @@
         <p>
             <span class="help-inline">
                 <form id="cardCreateForm">
-                    <input type="text" placeholder="Card Name">
-                    <input type="text" placeholder="Cost (e.g: RR3)">
-                    <input type="text" placeholder="Description">
-                    <input type="text" placeholder="Image URL">
-                    <input type="text" placeholder="Flavor Text">
+                    <input type="text" id = "nameField" placeholder="Card Name">
+                    <input type="text" id = "costField" placeholder="Cost (e.g: RR3)">
+                    <input type="text" id = "descField" placeholder="Description">
+                    <input type="text" id = "imgField"  placeholder="Image URL">
+                    <input type="text" id = "flvField"  placeholder="Flavor Text">
                     <div class="btn btn-primary" id="makeCardBtn">Create Card</div>
                 </form>
             </span>
@@ -46,11 +46,21 @@
 </div>
 <script type="text/javascript">
         $('#makeCardBtn').click(function() {
+            var cname    = $("#nameField").val();
+            var ccostStr = $("#costField").val();
+            var costs    = ccostStr.split("");
+            var cdesc    = $("#descField").val();
+            var cimgUrl  = $("#imgField").val();
+            var cflv     = $("#flvField").val();
             result = $.ajax({
                 type: 'POST',
                 url: "api/addCard",
-                data: {name:'CounterSpell', desc:'Test desc'},
-                success: function() { alert ('worked');},
+                data: {name:cname, desc:cdesc, cost:costs, img_url:cimgUrl, flavor_text:cflv},
+                success: function(data) { 
+                    if (data.length > 0) {
+                        alert (data);
+                    }
+                },
                 error: function() { alert ('error');}
             });
             $('#cardCreateForm').each(function() {

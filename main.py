@@ -17,8 +17,20 @@ class CreateCardHandler(tornado.web.RequestHandler):
         c.save()
     def post(self):
         print "post request"
-        print self.get_argument('name')
-        print self.get_argument('desc')
+        cname = self.get_argument('name')
+        cdesc = self.get_argument('desc', default="")
+        costs = self.get_argument('cost[]')
+        img_url = self.get_argument('img_url', default="")
+        flavor_text = self.get_argument('flavor_text', default="")
+        c = Card.objects(name=cname);
+        if len(c) > 0:
+            self.write("%s already exists" %cname)
+            self.flush()
+            return
+        c = Card(name=cname, desc=cdesc, total_cost=[costs], ccost=1, image_path=img_url, flv=flavor_text)
+        c.save()
+        print "Add Card was successful"
+        print self.request.arguments
 
 class MainHandler(tornado.web.RequestHandler):
     def init_html(self):
