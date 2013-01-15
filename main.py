@@ -5,10 +5,27 @@ from mongoengine import *
 from card_schema import *
 import os
 import uimodules
+import urllib
+import subprocess
+import pipes
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("main.html")
+        self.render("static/html/main.html")
+
+class SearchCardHandler(tornado.web.RequestHandler):
+    def get(self):
+        print "get search request"
+    def post(self):
+        print "search request"
+        query = self.get_argument('query');
+        c = Card.objects(name=query);
+        if c is None or len(c) <= 0:
+            print "no results"
+            self.write("Card not found. You should add it instead!")
+            return
+        self.write("Found")
+        self.flush()
 
 class CreateCardHandler(tornado.web.RequestHandler):
     def get(self):
@@ -59,6 +76,26 @@ class CreateCardHandler(tornado.web.RequestHandler):
                 flv=flavor_text)
 
         c.save()
+
+        #this needs to be done properly ...
+        #if we ever launch :p
+        print "retriving image from url ..."
+        f = open('static/cards/%s.jpg' %cname,'wb')
+        f.write(urllib.urlopen(img_url).read())
+        f.close()
+       
+        print "done downloading image ..."
+        #print "saving image to mongodb ..."
+
+        """file_location = pipes.quote("cards/%s" %cname)
+        print "debug-----"
+        print file_location
+        print "------"
+        print ("mongofiles -d XMTG put %s" %file_location)
+        save_process = subprocess.Popen("mongofiles -d XMTG put %s" %file_location, stdout=subprocess.PIPE)
+        save_process.communicate()[0]
+        """
+
         print "Add Card was successful"
         print self.request.arguments
 
@@ -79,6 +116,7 @@ settings = {
 application = tornado.web.Application([
     (r"/", HomeHandler),
     (r"/api/addCard", CreateCardHandler),
+    (r"/api/searchCards", SearchCardHandler),
     (r"/static/*", tornado.web.StaticFileHandler, dict(path=settings['static_path'])),
 ], **settings)
 

@@ -34,8 +34,10 @@
         <p>
             <span class="help-inline">
                 <form id="cardSearchForm">
-                    <input type="text" class="search-query" placeholder="Search for card" style="width:50%;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
+                    <input id="searchCardField" type="text" class="search-query" placeholder="Search for card" style="width:50%;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
                 </form>
+                <div id="cardImageResults"></div>
+                <div id="deckList"></div>
                 <form id="cardCreateForm">
                     <input type="text" id = "nameField" placeholder="Card Name">
                     <input type="text" id = "costField" placeholder="Cost (e.g: RR3)">
@@ -49,6 +51,35 @@
     </div>
 </div>
 <script type="text/javascript">
+        /*$('#searchCardField').submit(search());*/
+        function search() {
+            var search_query = $('#searchCardField').val();
+            result = $.ajax({
+                type: 'POST',
+                url: "api/searchCards",
+                data: {
+                    query: search_query 
+                    },
+                success: function(data) {
+                    if (data == "Found") {
+                       $('#cardImageResults').html("<img style='width:150px; height:255x;' src='static/cards/" + search_query + ".jpg'></img>"); 
+                       var $addButton = $('<div class="btn btn-primary" id="addCardBtn">Add Card to Deck</div>');
+                       $('#cardImageResults').append($addButton);
+                       $addButton.bind('click', add_card);
+                    }
+                },
+                error: function(data) {
+                    alert("error");
+                }
+            });
+            $('#searchCardField').val('');
+        }
+        function add_card() { 
+            /*make call to add card to deck*/
+        };
+        $('#searchCardBtn').click(function() {
+            search();
+        });
         $('#makeCardBtn').click(function() {
             var cname    = $("#nameField").val();
             var ccostStr = $("#costField").val();

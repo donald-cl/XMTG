@@ -14,4 +14,3 @@ class Card(Document):
     ccost       = IntField(required=True)
     image_path  = StringField()
 
-
