@@ -1,2 +1,8 @@
+*.pyc
 *~
 *.swp
+*.jpg
+*.png
+*.gif
+*.jpeg
+*.psd

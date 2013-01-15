@@ -14,3 +14,6 @@ class Card(Document):
     ccost       = IntField(required=True)
     image_path  = StringField()
 
+class Deck(Document):
+    name        = StringField(max_length=35)
+    cids        = ListField(ObjectIdField(), required=True)
