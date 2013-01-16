@@ -37,7 +37,8 @@
                     <input id="searchCardField" type="text" class="search-query" placeholder="Search for card" style="width:50%;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
                 </form>
                 <div id="cardImageResults"></div>
-                <div id="deckList"></div>
+                <div id="deckList"><ul id = "decklist"></ul></div>
+                <div id="saveDeckBtn" style="display:none;" class="btn btn-primary">Save Deck</div>
                 <form id="cardCreateForm">
                     <input type="text" id = "nameField" placeholder="Card Name">
                     <input type="text" id = "costField" placeholder="Cost (e.g: RR3)">
@@ -51,8 +52,7 @@
     </div>
 </div>
 <script type="text/javascript">
-        /*$('#searchCardField').submit(search());*/
-        function search() {
+       function search() {
             var search_query = $('#searchCardField').val();
             result = $.ajax({
                 type: 'POST',
@@ -65,7 +65,9 @@
                        $('#cardImageResults').html("<img style='width:150px; height:255x;' src='static/cards/" + search_query + ".jpg'></img>"); 
                        var $addButton = $('<div class="btn btn-primary" id="addCardBtn">Add Card to Deck</div>');
                        $('#cardImageResults').append($addButton);
-                       $addButton.bind('click', add_card);
+                       $addButton.bind('click', function() { 
+                           add_card(search_query);
+                       });
                     }
                 },
                 error: function(data) {
@@ -73,13 +75,29 @@
                 }
             });
             $('#searchCardField').val('');
-        }
-        function add_card() { 
-            /*make call to add card to deck*/
+        };
+        function add_card(cardName) { 
+            var nameArray = cardName.split(' ');
+            var singleStringName = nameArray.join('');
+            cardName = singleStringName;
+            var entry_html = "<li id='"+cardName+"'>"+cardName+"<span id='"+cardName+"count'></span</li>";
+            var count_val = $('#'+cardName+'count');
+            if ($('#'+cardName).length == 0) {
+                var $entry = $(entry_html);
+                $('#decklist').append($entry);
+            } else {
+                if (count_val.html() == "") {
+                    count_val.append(" x2");
+                }
+            }
+            $('#saveDeckBtn').show();
         };
         $('#searchCardBtn').click(function() {
             search();
         });
+        function save_deck() {
+
+        };
         $('#makeCardBtn').click(function() {
             var cname    = $("#nameField").val();
             var ccostStr = $("#costField").val();
