@@ -46,7 +46,7 @@ class CreateCardHandler(tornado.web.RequestHandler):
             if type(c) == int:
                 cost_dict['colorless'] = cost_dict.get(c, 0) + 1
             else:
-                cost_dict[str(c)] = cost_dict.get(str(c), 0) + 1
+                cost_dict[str(c).lower()] = cost_dict.get(str(c).lower(), 0) + 1
 
         colors = ['b','g','r','w','u','colorless']
 
@@ -64,7 +64,9 @@ class CreateCardHandler(tornado.web.RequestHandler):
             self.flush()
             return
         c = Card(name=cname, 
+                lowername=cname.lower(),
                 desc=cdesc, 
+                lowerdesc=cdesc.lower(),
                 total_cost=total_cost,
                 ccost=cost_dict['colorless'],
                 bcost=cost_dict['b'], 
@@ -73,7 +75,8 @@ class CreateCardHandler(tornado.web.RequestHandler):
                 wcost=cost_dict['w'],
                 ucost=cost_dict['u'],
                 image_path=img_url,
-                flv=flavor_text)
+                flv=flavor_text,
+                lowerflv=flavor_text.lower())
 
         c.save()
 

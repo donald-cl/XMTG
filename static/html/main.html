@@ -36,8 +36,11 @@
                 <form id="cardSearchForm">
                     <input id="searchCardField" type="text" class="search-query" placeholder="Search for card" style="width:50%;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
                 </form>
+
                 <div id="cardImageResults"></div>
                 <div id="deckList"><ul id = "decklist"></ul></div>
+
+                <input id="secretDeckName" type="text" placeholder="Secret Deck Name">
                 <div id="saveDeckBtn" style="display:none;" class="btn btn-primary">Save Deck</div>
                 <form id="cardCreateForm">
                     <input type="text" id = "nameField" placeholder="Card Name">
@@ -95,9 +98,23 @@
         $('#searchCardBtn').click(function() {
             search();
         });
-        function save_deck() {
+        $('#saveDeckBtn').click(function() {
+            var deckname = $('#secretDeckName').val();
+            result = $.ajax({
+                type: 'POST',
+                url: "api/saveDeck",
+                data: {
+                    deckname: deckname
+                },
+                success: function(data) {
 
-        };
+                },
+                error: function() {
+
+                }
+            });
+            $('#secretDeckName').val("");
+        });
         $('#makeCardBtn').click(function() {
             var cname    = $("#nameField").val();
             var ccostStr = $("#costField").val();

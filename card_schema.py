@@ -3,8 +3,11 @@ from mongoengine import *
 class Card(Document):
     cid         = ObjectIdField()
     name        = StringField(required=True, max_length=35)
+    lowername   = StringField(required=True, max_length=35)
     desc        = StringField(required=False)
-    flv         = StringField(required=True)
+    lowerdesc   = StringField(required=False)
+    flv         = StringField(required=False)
+    lowerflv    = StringField(required=False)
     ucost       = IntField()
     bcost       = IntField()
     rcost       = IntField()
@@ -16,4 +19,5 @@ class Card(Document):
 
 class Deck(Document):
     name        = StringField(max_length=35)
+    lowername   = StringField(max_length=35)
     cids        = ListField(ObjectIdField(), required=True)
