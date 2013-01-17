@@ -34,7 +34,7 @@
         <p>
             <span class="help-inline">
                 <form id="cardSearchForm">
-                    <input id="searchCardField" type="text" class="search-query" placeholder="Search for card" style="width:50%;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
+                    <input id="searchCardField" type="text" class="search-query" placeholder="Search for card" style="width:50%; margin-right:10px;"><div class="btn btn-primary" id="searchCardBtn">Search</div>
                 </form>
 
                 <div id="cardImageResults"></div>
@@ -66,7 +66,7 @@
                 success: function(data) {
                     if (data == "Found") {
                        $('#cardImageResults').html("<img style='width:150px; height:255x;' src='static/cards/" + search_query + ".jpg'></img>"); 
-                       var $addButton = $('<div class="btn btn-primary" id="addCardBtn">Add Card to Deck</div>');
+                       var $addButton = $('<div class="btn btn-primary" id="addCardBtn" style="margin-left:5px;">Add Card to Deck</div>');
                        $('#cardImageResults').append($addButton);
                        $addButton.bind('click', function() { 
                            add_card(search_query);
@@ -83,7 +83,7 @@
             var nameArray = cardName.split(' ');
             var singleStringName = nameArray.join('');
             cardName = singleStringName;
-            var entry_html = "<li id='"+cardName+"'>"+cardName+"<span id='"+cardName+"count'></span</li>";
+            var entry_html = "<div id='"+cardName+"_item'><li id='"+cardName+"' class='help-inline'>"+cardName+"<span id='"+cardName+"count'></span></div>";
             var count_val = $('#'+cardName+'count');
             if ($('#'+cardName).length == 0) {
                 var $entry = $(entry_html);
@@ -100,7 +100,7 @@
         });
         $('#saveDeckBtn').click(function() {
             var deckname = $('#secretDeckName').val();
-            var $cardlist = $('#decklist').children('li');
+            var $cardlist = $('#decklist').children('div').children('li');
             var list = new Array();
             $cardlist.each(function(index, val) {
                 list.push($(val).text());

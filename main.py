@@ -20,12 +20,14 @@ class SaveDeckHandler(tornado.web.RequestHandler):
         cids     = []
 
         print "printing cards...."
-        for card in decklist:
-            print card
-            results = Card.objects(name=card)
-            for result in results:
-                print result.id
-                cids.append(result.id)
+        if decklist is not None:
+            for card in decklist:
+                print card
+                results = Card.objects(name=card)
+                if results is not None:
+                    for result in results:
+                        print result.id
+                        cids.append(result.id)
         print cids
 
         d = Deck(name=deckname,
