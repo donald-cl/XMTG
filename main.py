@@ -13,12 +13,34 @@ class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/html/main.html")
 
+class SaveDeckHandler(tornado.web.RequestHandler):
+    def post(self):
+        deckname = self.get_argument('deckname')
+        decklist = self.request.arguments.get('cardlist[]')
+        cids     = []
+
+        print "printing cards...."
+        for card in decklist:
+            print card
+            results = Card.objects(name=card)
+            for result in results:
+                print result.id
+                cids.append(result.id)
+        print cids
+
+        d = Deck(name=deckname,
+                 lowername=deckname.lower(),
+                  cids=cids)
+        d.save()
+        print "Deck was successfully saved"
+
+
 class SearchCardHandler(tornado.web.RequestHandler):
     def get(self):
         print "get search request"
     def post(self):
         print "search request"
-        query = self.get_argument('query');
+        query = self.get_argument('query')
         c = Card.objects(name=query);
         if c is None or len(c) <= 0:
             print "no results"
@@ -120,6 +142,7 @@ application = tornado.web.Application([
     (r"/", HomeHandler),
     (r"/api/addCard", CreateCardHandler),
     (r"/api/searchCards", SearchCardHandler),
+    (r"/api/saveDeck", SaveDeckHandler),
     (r"/static/*", tornado.web.StaticFileHandler, dict(path=settings['static_path'])),
 ], **settings)
 

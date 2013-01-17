@@ -100,11 +100,17 @@
         });
         $('#saveDeckBtn').click(function() {
             var deckname = $('#secretDeckName').val();
+            var $cardlist = $('#decklist').children('li');
+            var list = new Array();
+            $cardlist.each(function(index, val) {
+                list.push($(val).text());
+            });
             result = $.ajax({
                 type: 'POST',
                 url: "api/saveDeck",
                 data: {
-                    deckname: deckname
+                    deckname: deckname,
+                    cardlist: list
                 },
                 success: function(data) {
 
